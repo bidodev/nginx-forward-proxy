@@ -50,4 +50,4 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64,linux/arm
           push: true
-          tags: ${{ steps.prep.outputs.tags }}
+          tags: latest
