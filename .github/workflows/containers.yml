@@ -20,9 +20,9 @@ jobs:
           TAGS="${DOCKER_IMAGE}:${VERSION},${DOCKER_IMAGE}:latest"
       
           # Set output parameters
-          echo ::set-output name=version::${VERSION}
-          echo ::set-output name=tags::${TAGS}
-          echo ::set-output name=docker_image::${DOCKER_IMAGE}
+          echo "{version}={VERSION}" >> $GITHUB_OUTPUT
+          echo "{tags}={TAGS}" >> $GITHUB_OUTPUT
+          echo "{docker_image}={DOCKER_IMAGE}" >> $GITHUB_OUTPUT
       - name: Get the version
         id: get_version
         run: echo ::set-output name=version::${GITHUB_REF/refs\/tags\//}     
@@ -42,7 +42,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and Push
+      - name: Build
         uses: docker/build-push-action@v2
         with:
           builder: ${{ steps.buildx.outputs.name }}
@@ -50,6 +50,4 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64,linux/arm
           push: true
-          tags: bidodev/nginx-forward-proxy:${{ env.BRANCH }}
-          build-args: | 
-              BRANCH=${{ env.BRANCH }}
+          tags: ${{ steps.prep.outputs.tags }}
