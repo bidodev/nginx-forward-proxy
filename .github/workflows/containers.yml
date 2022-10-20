@@ -50,4 +50,6 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64,linux/arm
           push: true
-          tags: ${{ env.BRANCH }}
+          tags: bidodev/nginx-forward-proxy:${{ env.BRANCH }}
+          build-args: | 
+              BRANCH=${{ env.BRANCH }}
